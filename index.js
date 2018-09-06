@@ -1,36 +1,37 @@
-const ageInput = document.getElementsByName("age")[0];
-const relationshipInput = document.getElementsByName("rel")[0];
-const smokerInput = document.getElementsByName("smoker")[0];
+const ageOfMember = document.getElementsByName("age")[0];
+const relationToMember = document.getElementsByName("rel")[0];
+const smoker = document.getElementsByName("smoker")[0];
 const addButton = document.getElementsByClassName("add")[0];
 const debug = document.getElementsByClassName("debug")[0];
-const deleteButton = document.createElement("button");
-const deleteInput = document.createElement("input");
+const deleteBtn = document.createElement("button");
+const deleteHouseHold = document.createElement("input");
 const list = document.createElement("ol");
 const form = document.forms[0];
 let householdList = [];
 
-deleteInput.placeholder = "number person you wish to delete";
-deleteButton.innerHTML = "delete";
+deleteHouseHold.placeholder = "number person you wish to delete";
+deleteBtn.innerHTML = "delete";
 list.id = "list";
 
+//Add an household
 addButton.onclick = (event) => {
   event.preventDefault();
   if (checkInputs("add")) {
-    if(ageInput.value <= 0) {
+    if(ageOfMember.value < 1) {
         alert("Age has to be greater than 0")
     } else {
         let person = {
-            age: ageInput.value,
-            relationship: relationshipInput.value,
-            smoker: smokerInput.checked === true ? "Yes" : "No"
+            age: ageOfMember.value,
+            relationship: relationToMember.value,
+            smoker: smoker.checked === true ? "Yes" : "No"
         };
-        let liNode = document.createElement("li");
-        let personNode = document.createTextNode("Age: " + person.age + " | Relationship: " + person.relationship + " | Smoker: " + person.smoker);
+        let listNode = document.createElement("li");
+        let personNode = document.createTextNode("Age: " + person.age + " Relationship: " + person.relationship + " Smoker: " + person.smoker);
     
-        liNode.name = "li";
+        listNode.name = "li";
     
-        liNode.appendChild(personNode);
-        list.appendChild(liNode);
+        listNode.appendChild(personNode);
+        list.appendChild(listNode);
         householdList.push(person);
     
         resetForm();
@@ -39,19 +40,19 @@ addButton.onclick = (event) => {
     alert('Please insert data.');
   }
 };
-ageInput.onkeyup = () => {
+ageOfMember.onkeyup = () => {
   inputValidation(this);
 };
-deleteButton.onclick = (event) => {
+deleteBtn.onclick = (event) => {
   event.preventDefault();
-  let value = deleteInput.value;
+  let value = deleteHouseHold.value;
   if (checkInputs("delete") && value <= householdList.length) {
     householdList.splice(value - 1, 1);
     list.removeChild(list.childNodes[value - 1]);
   }
   resetForm();
 };
-deleteInput.onkeyup = () => {
+deleteHouseHold.onkeyup = () => {
   inputValidation(this);
 };
 form.onsubmit = (event) => {
@@ -63,8 +64,8 @@ form.onsubmit = (event) => {
   debug.innerHTML = serialize;
 };
 
-form.appendChild(deleteInput);
-form.appendChild(deleteButton);
+form.appendChild(deleteHouseHold);
+form.appendChild(deleteBtn);
 form.appendChild(list);
 
 inputValidation = (event) => {
@@ -75,20 +76,20 @@ inputValidation = (event) => {
 }
 
 resetForm = () => {
-  ageInput.value = "";
-  relationshipInput.value = "";
-  smokerInput.checked = false;
-  deleteInput.value = "";
+  ageOfMember.value = "";
+  relationToMember.value = "";
+  smoker.checked = false;
+  deleteHouseHold.value = "";
 }
 
 checkInputs = (type) => {
   switch (type) {
     case "add":
-      if (ageInput.value.length === 0 || relationshipInput.value.length === 0) return false;
+      if (ageOfMember.value.length === 0 || relationToMember.value.length === 0) return false;
       else return true;
       break;
     case "delete":
-      if (deleteInput.value.length === 0 || householdList.length <= 0) return false;
+      if (deleteHouseHold.value.length === 0 || householdList.length <= 0) return false;
       else return true;
       break;
     default:
