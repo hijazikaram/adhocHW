@@ -9,11 +9,11 @@ const deleteBtn = document.createElement("button");
 const deleteHouseHold = document.createElement("input");
 const list = document.createElement("ol");
 const form = document.forms[0];
+// creating an empty array to hold all of our household members
 let hhList = [];
 
 // labeling our button
 deleteBtn.innerHTML = "delete";
-
 //Add an household
 addButton.onclick = (event) => {
   // ensuring the page doesn't reload on submit
@@ -22,13 +22,14 @@ addButton.onclick = (event) => {
     if(ageOfMember.value < 1) {
         alert("Age has to be greater than 0")
     } else {
-      // putting our values into an object that will be pushed to our hhList array
+        // putting our values into an object that will be pushed to our hhList array
         let person = {
-            age: ageOfMember.value,
-            relationship: relationToMember.value,
-            // conditional to change our smoker variable to a string
-            smoker: smoker.checked === true ? "Yes" : "No"
+          age: ageOfMember.value,
+          relationship: relationToMember.value,
+          // conditional to change our smoker variable to a string
+          smoker: smoker.checked === true ? "Yes" : "No"
         };
+        
         let listNode = document.createElement("li");
         let personNode = document.createTextNode("Age: " + person.age + " Relationship: " + person.relationship + " Smoker: " + person.smoker);
         deleteBtn.addEventListener('click', () => {
@@ -54,9 +55,16 @@ addButton.onclick = (event) => {
   }
 };
 ageOfMember.onkeyup = (event) => {
-  inputValidation(event.target.value);
+  let age = parseInt(event.target.value);
+  if (age < 1 || isNaN(age)) {
+    alert('Age that is > 0 is required.');
+  }
 };
-
+// inputValidation = (value) => {
+  //   if (!(value.match(/^\d+$/)) || value <= 0) {
+  //     value = "";
+  //   }
+  // }
 
 form.onsubmit = (event) => {
   // ensuring the page doesn't reload on submit
@@ -74,12 +82,6 @@ form.onsubmit = (event) => {
 };
 
 form.appendChild(list);
-
-inputValidation = (value) => {
-  if (!(value.match(/^\d+$/)) || value <= 0) {
-    value = "";
-  }
-}
 
 //reset the form everytime user adds a new household
 resetForm = () => {
