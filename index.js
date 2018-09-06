@@ -9,39 +9,38 @@ const list = document.createElement("ol");
 const form = document.forms[0];
 let householdList = [];
 
-deleteInput.placeholder = "# person you wish to delete";
+deleteInput.placeholder = "number person you wish to delete";
 deleteButton.innerHTML = "delete";
 list.id = "list";
 
 addButton.onclick = (event) => {
   event.preventDefault();
   if (checkInputs("add")) {
-    console.log(ageInput.value);
     if(ageInput.value <= 0) {
         alert("Age has to be greater than 0")
     } else {
         let person = {
-        age: ageInput.value,
-        relationship: relationshipInput.value,
-        smoker: smokerInput.checked === true ? "Yes" : "No"
+            age: ageInput.value,
+            relationship: relationshipInput.value,
+            smoker: smokerInput.checked === true ? "Yes" : "No"
         };
-        let listNode = document.createElement("li");
+        let liNode = document.createElement("li");
         let personNode = document.createTextNode("Age: " + person.age + " | Relationship: " + person.relationship + " | Smoker: " + person.smoker);
     
-        listNode.name = "li";
+        liNode.name = "li";
     
-        listNode.appendChild(personNode);
-        list.appendChild(listNode);
+        liNode.appendChild(personNode);
+        list.appendChild(liNode);
         householdList.push(person);
     
-        resetDefaults();
+        resetForm();
     }
   } else {
     alert('Please insert data.');
   }
 };
 ageInput.onkeyup = () => {
-  validation(this);
+  inputValidation(this);
 };
 deleteButton.onclick = (event) => {
   event.preventDefault();
@@ -50,12 +49,12 @@ deleteButton.onclick = (event) => {
     householdList.splice(value - 1, 1);
     list.removeChild(list.childNodes[value - 1]);
   }
-  resetDefaults();
+  resetForm();
 };
 deleteInput.onkeyup = () => {
-  validation(this);
+  inputValidation(this);
 };
-form.onsubmit = function(event) {
+form.onsubmit = (event) => {
   event.preventDefault();
   let serialize = JSON.stringify(householdList);
   debug.style.display = "block";
@@ -68,14 +67,14 @@ form.appendChild(deleteInput);
 form.appendChild(deleteButton);
 form.appendChild(list);
 
-validation = (event) => {
+inputValidation = (event) => {
   let value = event.value;
   if (!(value.match(/^\d+$/)) || value <= 0) {
     event.value = "";
   }
 }
 
-resetDefaults = () => {
+resetForm = () => {
   ageInput.value = "";
   relationshipInput.value = "";
   smokerInput.checked = false;
