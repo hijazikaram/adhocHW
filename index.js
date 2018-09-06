@@ -52,18 +52,23 @@ deleteBtn.onclick = (event) => {
   }
   resetForm();
 };
+
 deleteHouseHold.onkeyup = () => {
   inputValidation(this);
 };
-form.onsubmit = (event) => {
-  event.preventDefault();
-  let serialize = JSON.stringify(householdList);
-  debug.style.display = "block";
-  debug.style.wordWrap = "break-word";
-  debug.style.whiteSpace = "initial";
-  debug.innerHTML = serialize;
-};
 
+form.onsubmit = (event) => {
+  if(householdList === []) {
+    alert('Please insert data.');
+  } else {
+    event.preventDefault();
+    let serialize = JSON.stringify(householdList);
+    debug.style.display = "block";
+    debug.style.wordWrap = "break-word";
+    debug.style.whiteSpace = "initial";
+    debug.innerHTML = serialize;
+  }
+};
 form.appendChild(deleteHouseHold);
 form.appendChild(deleteBtn);
 form.appendChild(list);
