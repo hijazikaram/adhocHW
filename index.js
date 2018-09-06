@@ -1,76 +1,78 @@
+// assigning variables to our DOM element values
 const ageOfMember = document.getElementsByName("age")[0];
 const relationToMember = document.getElementsByName("rel")[0];
 const smoker = document.getElementsByName("smoker")[0];
 const addButton = document.getElementsByClassName("add")[0];
 const debug = document.getElementsByClassName("debug")[0];
+// creating DOM elements to display our household and
 const deleteBtn = document.createElement("button");
 const deleteHouseHold = document.createElement("input");
 const list = document.createElement("ol");
 const form = document.forms[0];
-let householdList = [];
+let hhList = [];
 
-deleteHouseHold.placeholder = "number person you wish to delete";
+// labeling our button
 deleteBtn.innerHTML = "delete";
-list.id = "list";
 
 //Add an household
 addButton.onclick = (event) => {
+  // ensuring the page doesn't reload on submit
   event.preventDefault();
   if (checkInputs("add")) {
     if(ageOfMember.value < 1) {
         alert("Age has to be greater than 0")
     } else {
+      // putting our values into an object that will be pushed to our hhList array
         let person = {
             age: ageOfMember.value,
             relationship: relationToMember.value,
+            // conditional to change our smoker variable to a string
             smoker: smoker.checked === true ? "Yes" : "No"
         };
         let listNode = document.createElement("li");
         let personNode = document.createTextNode("Age: " + person.age + " Relationship: " + person.relationship + " Smoker: " + person.smoker);
-    
+        deleteBtn.addEventListener('click', () => {
+          // logic to remove the person object from the hhList array
+          // and remove the created <li> node
+          var arrIndex = hhList.indexOf(person);
+          hhList.splice(arrIndex, 1);
+          listNode.remove();
+          resetForm();
+        });
         listNode.name = "li";
-    
+        // appending our elements to the DOM to display
         listNode.appendChild(personNode);
+        listNode.appendChild(deleteBtn);
         list.appendChild(listNode);
-        householdList.push(person);
-    
+        hhList.push(person);
+        //reset form after adding a new person to the house hold
         resetForm();
     }
   } else {
-    alert('Please insert data.');
+    // validating that we have at least one person in the household
+    alert('Please add at least one member to the houeshold.');
   }
 };
 ageOfMember.onkeyup = () => {
   inputValidation(this);
 };
-deleteBtn.onclick = (event) => {
-  event.preventDefault();
-  let value = deleteHouseHold.value;
-  if (checkInputs("delete") && value <= householdList.length) {
-    householdList.splice(value - 1, 1);
-    list.removeChild(list.childNodes[value - 1]);
-  }
-  resetForm();
-};
 
-deleteHouseHold.onkeyup = () => {
-  inputValidation(this);
-};
 
 form.onsubmit = (event) => {
-  if(householdList === []) {
-    alert('Please insert data.');
+  // ensuring the page doesn't reload on submit
+  event.preventDefault();
+  // validating that we have at least one person in the household
+  if(hhList.length === 0) {
+    alert('Please add at least one member to the houeshold.');
   } else {
-    event.preventDefault();
-    let serialize = JSON.stringify(householdList);
+    let serialize = JSON.stringify(hhList);
     debug.style.display = "block";
     debug.style.wordWrap = "break-word";
     debug.style.whiteSpace = "initial";
     debug.innerHTML = serialize;
   }
 };
-form.appendChild(deleteHouseHold);
-form.appendChild(deleteBtn);
+
 form.appendChild(list);
 
 inputValidation = (event) => {
@@ -94,7 +96,7 @@ checkInputs = (type) => {
       else return true;
       break;
     case "delete":
-      if (deleteHouseHold.value.length === 0 || householdList.length <= 0) return false;
+      if (deleteHouseHold.value.length === 0 || hhList.length <= 0) return false;
       else return true;
       break;
     default:
