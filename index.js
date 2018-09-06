@@ -53,8 +53,8 @@ addButton.onclick = (event) => {
     alert('Please add at least one member to the houeshold.');
   }
 };
-ageOfMember.onkeyup = () => {
-  inputValidation(this);
+ageOfMember.onkeyup = (event) => {
+  inputValidation(event);
 };
 
 
@@ -77,11 +77,12 @@ form.appendChild(list);
 
 inputValidation = (event) => {
   let value = event.value;
-  if (!(value.match(/^\d+$/)) || value <= 0) {
-    event.value = "";
+  if (value.match(/^\d+$/) || value <= 0) {
+    value = "";
   }
 }
 
+//reset the form everytime user adds a new household
 resetForm = () => {
   ageOfMember.value = "";
   relationToMember.value = "";
