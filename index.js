@@ -54,7 +54,7 @@ addButton.onclick = (event) => {
   }
 };
 ageOfMember.onkeyup = (event) => {
-  inputValidation(event);
+  inputValidation(event.target.value);
 };
 
 
@@ -75,9 +75,8 @@ form.onsubmit = (event) => {
 
 form.appendChild(list);
 
-inputValidation = (event) => {
-  let value = event.value;
-  if (value.match(/^\d+$/) || value <= 0) {
+inputValidation = (value) => {
+  if (!(value.match(/^\d+$/)) || value <= 0) {
     value = "";
   }
 }
